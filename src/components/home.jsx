@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component , useRef } from 'react';
 import axios from 'axios';
 import img from '../images/modiji.png';
-
+import ReactDOM from 'react-dom'
 class Home extends Component {
     constructor(props) {
       super(props);
@@ -9,13 +9,21 @@ class Home extends Component {
   
       this.state = {
        
-        listData1:{},
-        listData:[]
-  
+        listData1:[],
+        listData:[],
+          datas:[0,1,2]
         }
         this.get = this.get.bind(this);
         this.addteam=this.addteam.bind(this);
-        alert("haii");
+        
+        console.log("here the length"+this.state.datas.length);
+         for(var i=0;i<this.state.datas.length;i++){
+           this.myref =React.createRef();
+          this.state.listData1.push(this.myref);
+            console.log("here ref"+this.state.listData1[i]);
+         }
+        
+       
     
       };
       componentDidMount() {
@@ -51,7 +59,18 @@ addteam(id){
     this.props.history.push('/results'+"/"+id);
 }
    
-  
+ toggle(e,i){
+   console.log(e.current);
+
+  ReactDOM.findDOMNode(e.current).style.display='block';
+  for(var i=0;i<this.state.listData1.length;i++){
+    if(this.state.listData1[i]!=e){
+      ReactDOM.findDOMNode(this.state.listData1[i].current).style.display='none';
+    }
+  }
+  this.setState(this.state.listData1);
+
+ } 
   
   
     render() {
@@ -60,7 +79,13 @@ addteam(id){
   
       return (
         <div >{this.state.listData.length>0?(
+            <div>{this.state.listData1.map((es,i)=>
             <div>
+<button ref={es} className="btn btn-success" onClick={()=>this.toggle(es,i)}  >{i}</button> 
+<p style={{display:"none"}} ref={es} >hello{i}</p>
+</div>
+            )}
+            
             {this.state.listData.map((a,index)=>(
             
            <section>
